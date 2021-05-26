@@ -51,8 +51,8 @@ SUCCESS
 ### try using a custom certificate with ggcr
 
 You must configure the cert on the `http.Transport`, this snippet ignores errors for brevity.
-See [`main.go`](app/cmd/main.go) for full code
-```go
+See [`main.go`](app/main.go) for full code
+```
 pool, _ := x509.SystemCertPool()
 
 crt, _ := ioutil.ReadFile("path/to/localhost.crt"); 
