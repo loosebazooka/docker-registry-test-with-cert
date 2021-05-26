@@ -1,5 +1,5 @@
-# docker-registry-test-with-cert
-A guide and some scripts to get local go applications to use a self signed cert for testing
+# Docker Registry Test With Cert
+An example to get local go applications to use a self signed cert for testing
 
 ### make your certificates
 ```
