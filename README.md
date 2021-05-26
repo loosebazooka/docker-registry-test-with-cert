@@ -53,30 +53,30 @@ SUCCESS
 You must configure the cert on the `http.Transport`, this snippet ignores errors for brevity.
 See [`main.go`](app/cmd/main.go) for full code
 ```
-  pool, _ := x509.SystemCertPool()
+pool, _ := x509.SystemCertPool()
 
-	crt, _ := ioutil.ReadFile("path/to/localhost.crt"); 
-	pool.AppendCertsFromPEM(crt)
+crt, _ := ioutil.ReadFile("path/to/localhost.crt"); 
+pool.AppendCertsFromPEM(crt)
 
-	transport := http.DefaultTransport.(*http.Transport).Clone()
-	transport.TLSClientConfig = &tls.Config{
-		MinVersion: tls.VersionTLS12,
-		RootCAs:    pool,
-	}
+transport := http.DefaultTransport.(*http.Transport).Clone()
+transport.TLSClientConfig = &tls.Config{
+	MinVersion: tls.VersionTLS12,
+	RootCAs:    pool,
+}
 
-	return transport
+return transport
 ```
 
 Then using this transport query something on the registry using ggcr
 ```
-	registry, _ := name.NewRegistry("localhost:5000")
+registry, _ := name.NewRegistry("localhost:5000")
 
-	catalog, _ := remote.Catalog(context.Background(),
-		registry,
-		remote.WithAuthFromKeychain(authn.DefaultKeychain),
-		remote.WithTransport(transport))
+catalog, _ := remote.Catalog(context.Background(),
+	registry,
+	remote.WithAuthFromKeychain(authn.DefaultKeychain),
+	remote.WithTransport(transport))
 
-	fmt.Println(catalog)
+fmt.Println(catalog)
 ```
 
 Once your registry is up and running, try to hit it with this simple go code
