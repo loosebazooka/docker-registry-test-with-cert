@@ -52,7 +52,7 @@ SUCCESS
 
 You must configure the cert on the `http.Transport`, this snippet ignores errors for brevity.
 See [`main.go`](app/cmd/main.go) for full code
-```
+```go
 pool, _ := x509.SystemCertPool()
 
 crt, _ := ioutil.ReadFile("path/to/localhost.crt"); 
@@ -68,7 +68,7 @@ return transport
 ```
 
 Then using this transport query something on the registry using ggcr
-```
+```go
 registry, _ := name.NewRegistry("localhost:5000")
 
 catalog, _ := remote.Catalog(context.Background(),
