@@ -7,8 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"os"
 
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
@@ -22,13 +22,12 @@ const (
 func main() {
 	reg, err := name.NewRegistry("localhost:5000")
 	if err != nil {
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	transport, err := getTransport(certPath)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	catalog, err := remote.Catalog(context.Background(),
@@ -36,8 +35,7 @@ func main() {
 		remote.WithAuthFromKeychain(authn.DefaultKeychain),
 		remote.WithTransport(transport))
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 	fmt.Println(catalog)
 }
