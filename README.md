@@ -18,7 +18,7 @@ out
 $ ./start_registry.sh
 ```
 
-Once the registry is up and running, you can try communicating with it
+Once the registry is up and running, you can try communicating with it. This can fail silently because I didn't add any checks, check if the registry is up and running `docker ps`. If its not, it probably means you didn't generate cert/key files first.
 
 ### try with `curl`
 ```
