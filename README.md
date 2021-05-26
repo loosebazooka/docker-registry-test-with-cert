@@ -34,7 +34,7 @@ $ curl -v --cacert ./out/certs/localhost.crt https://localhost:5000/v2/
 SUCCESS
 ```
 
-### try with golang application
+### try with existing golang application
 Now to use this cert with an existing go application, you must set the env `SSL_CERT_FILE` before invocation. In this example we use [crane](https://github.com/google/go-containerregistry/blob/main/cmd/crane/README.md)
 ```
 $ crane -v catalog localhost:5000
@@ -48,6 +48,39 @@ $ SSL_CERT_FILE=./out/certs/localhost.crt crane -v catalog localhost:5000
 SUCCESS
 ```
 
-### try setting programmatically in golang code
+### try using a custom certificate with ggcr
 
-TODO
+You must configure the cert on the `http.Transport`, this snippet ignores errors for brevity.
+See `app/cmd/main.go` for full code
+```
+  pool, _ := x509.SystemCertPool()
+
+	crt, _ := ioutil.ReadFile("path/to/localhost.crt"); 
+	pool.AppendCertsFromPEM(crt)
+
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.TLSClientConfig = &tls.Config{
+		MinVersion: tls.VersionTLS12,
+		RootCAs:    pool,
+	}
+
+	return transport
+```
+
+Then using this transport query something on the registry using ggcr
+```
+	registry, _ := name.NewRegistry("localhost:5000")
+
+	catalog, _ := remote.Catalog(context.Background(),
+		registry,
+		remote.WithAuthFromKeychain(authn.DefaultKeychain),
+		remote.WithTransport(transport))
+
+	fmt.Println(catalog)
+```
+
+Once your registry is up and running, try to hit it with this simple go code
+```
+$ cd app
+$ go run cmd/main.go
+```
