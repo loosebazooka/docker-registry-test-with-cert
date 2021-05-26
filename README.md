@@ -51,7 +51,7 @@ SUCCESS
 ### try using a custom certificate with ggcr
 
 You must configure the cert on the `http.Transport`, this snippet ignores errors for brevity.
-See `app/cmd/main.go` for full code
+See [`main.go`](app/cmd/main.go) for full code
 ```
   pool, _ := x509.SystemCertPool()
 
